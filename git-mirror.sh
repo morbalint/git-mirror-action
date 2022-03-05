@@ -6,13 +6,15 @@ SOURCE_REPO=$1
 DESTINATION_REPO=$2
 SOURCE_DIR=$(basename "$SOURCE_REPO")
 SINGLE_BRANCH=$3
-DRY_RUN=$4
+SINGLE_BRANCH_FORCE=$4
+DRY_RUN=$5
 
 GIT_SSH_COMMAND="ssh -v"
 
 echo "SOURCE=$SOURCE_REPO"
 echo "DESTINATION=$DESTINATION_REPO"
 echo "SINGLE BRANCH=$SINGLE_BRANCH"
+echo "SINGLE BRANCH FORCE PUSH=$SINGLE_BRANCH_FORCE"
 echo "DRY RUN=$DRY_RUN"
 
 if [ -z "$SINGLE_BRANCH" ]
@@ -35,6 +37,11 @@ then
   GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --mirror"
 else
   GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS origin $SINGLE_BRANCH"
+  if [ "$SINGLE_BRANCH_FORCE" = "true" ]
+  then
+    echo "INFO: Force pushing the single branch"
+    GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --force"
+  fi
 fi
 
 if [ "$DRY_RUN" = "true" ]

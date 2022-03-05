@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 * workflow tests
-* single branch option
+* single branch option with optional force pushing
 
 ## [1.0.1] - 2020-03-23
 

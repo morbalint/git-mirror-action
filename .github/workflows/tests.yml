@@ -33,4 +33,5 @@ jobs:
           source-repo: "https://github.com/wearerequired/git-mirror-action.git" # Proof that HTTPS works as well
           destination-repo: "git@github.com:morbalint/git-mirror-action.git"
           single-branch: master
+          single-branch-force: true
           dry-run: true
