@@ -12,6 +12,14 @@ A GitHub Action for [mirroring a git repository](https://help.github.com/en/arti
 
 **Required** SSH URL of the destination repo.
 
+### `single-branch`
+
+**Optional** *(default: ``)* When this input is not empty, only mirror this single branch. Otherwise mirror the entire repository, as before this input was introduced. 
+
+### `single-branch-force`
+
+**Optional** *(default: `false`)* Only matters if single-branch is not empty. If set to `true` the single branch mirroring will force push the branch.
+
 ### `dry-run`
 
 **Optional** *(default: `false`)* Execute a dry run. All steps are executed, but no updates are pushed to the destination repo.
@@ -47,6 +55,9 @@ jobs:
         with:
           source-repo: "git@github.com:wearerequired/git-mirror-action.git"
           destination-repo: "git@bitbucket.org:wearerequired/git-mirror-action.git"
+          single-branch: master
+          single-branch-force: false
+          dry-run: true
 ```
 
 ## Docker

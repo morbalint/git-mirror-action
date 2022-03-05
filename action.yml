@@ -12,6 +12,14 @@ inputs:
     description: 'SSH URL of the destination repo.'
     required: true
     default: ''
+  single-branch:
+    description: 'If present only mirror this single branch.'
+    required: false
+    default: ''
+  single-branch-force:
+    description: 'Force push the single branch.'
+    required: false
+    default: 'false'
   dry-run:
     description: 'Execute a dry run.'
     required: false
@@ -22,4 +30,6 @@ runs:
   args:
     - ${{ inputs.source-repo }}
     - ${{ inputs.destination-repo }}
+    - ${{ inputs.single-branch }}
+    - ${{ inputs.single-branch-force }}
     - ${{ inputs.dry-run }}
