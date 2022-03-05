@@ -34,7 +34,7 @@ then
   git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
   GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --mirror"
 else
-  GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS $SINGLE_BRANCH"
+  GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS origin $SINGLE_BRANCH"
 fi
 
 if [ "$DRY_RUN" = "true" ]
