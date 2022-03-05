@@ -12,6 +12,10 @@ A GitHub Action for [mirroring a git repository](https://help.github.com/en/arti
 
 **Required** SSH URL of the destination repo.
 
+### `single-branch`
+
+**Optional** *(default: ``)* When this input is not empty, only mirror this single branch. Otherwise mirror the entire repository, as before this input was introduced. 
+
 ### `dry-run`
 
 **Optional** *(default: `false`)* Execute a dry run. All steps are executed, but no updates are pushed to the destination repo.
