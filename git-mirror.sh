@@ -27,10 +27,9 @@ git remote set-url --push origin "$DESTINATION_REPO"
 if [ -z "$SINGLE_BRANCH" ]
 then
   git fetch -p origin
+  # Exclude refs created by GitHub for pull request.
+  git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
 fi
-
-# Exclude refs created by GitHub for pull request.
-git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
 
 if [ "$DRY_RUN" = "true" ]
 then
