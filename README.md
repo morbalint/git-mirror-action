@@ -14,7 +14,7 @@ A GitHub Action for [mirroring a git repository](https://help.github.com/en/arti
 
 ### `branches`
 
-**Optional** *(default: ``)* When this input is not empty, only mirror selected branches. Branches must be separated by `:`. Otherwise mirror the entire repository, as before this input was introduced. 
+**Optional** *(default: ``)* When this input is not empty, only mirror selected branches. Branches must be separated by `:`. Tags are not mirrored. If let unset, mirror the entire repository, as before this input was introduced. 
 
 Note `:` is used because it's one of the illegal characters to be used in a branch name.
 

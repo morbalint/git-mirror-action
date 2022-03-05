@@ -22,18 +22,19 @@ then
   git clone --mirror "$SOURCE_REPO" "$SOURCE_DIR" && cd "$SOURCE_DIR"
 else
   echo "INFO: Branch mirroring only!"
-  git init --bare target && cd target
+  git init --bare -q target && cd target
   git remote add origin "$SOURCE_REPO"
   git config --unset-all remote.origin.fetch
   SPLIT_BRANCHES=$(echo "$BRANCHES" | tr ":" "\n")
   for BRANCH in $SPLIT_BRANCHES;
   do
     git config --add remote.origin.fetch "+refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
+    git config --add remote.origin.push "+refs/remotes/origin/$BRANCH:refs/heads/$BRANCH"
   done
-  git fetch
+  git fetch --no-tags
 fi
-git remote set-url --push origin "$DESTINATION_REPO"
 
+git remote set-url --push origin "$DESTINATION_REPO"
 GIT_PUSH_FLAGS=""
 
 # not much point of pruning all other branches that might be present when mirroring a single branch.
@@ -47,7 +48,7 @@ else
   GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS origin"
   if [ "$FORCE_PUSH_BRANCHES" = "true" ]
   then
-    echo "INFO: Force pushing the single branch"
+    echo "INFO: Force pushing the branches"
     GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --force"
   fi
 fi
