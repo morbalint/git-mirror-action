@@ -19,9 +19,12 @@ if [ -z "$SINGLE_BRANCH" ]
 then
   git clone --mirror "$SOURCE_REPO" "$SOURCE_DIR" && cd "$SOURCE_DIR"
 else
-  git clone --mirror --single-branch --branch "$SINGLE_BRANCH" "$SOURCE_REPO" "$SOURCE_DIR" && cd "$SOURCE_DIR"
+  echo "INFO: Single branch mirroring only!"
+  git clone --bare --single-branch --branch "$SINGLE_BRANCH" "$SOURCE_REPO" "$SOURCE_DIR" && cd "$SOURCE_DIR"
 fi
 git remote set-url --push origin "$DESTINATION_REPO"
+
+GIT_PUSH_FLAGS=""
 
 # not much point of pruning all other branches that might be present when mirroring a single branch.
 if [ -z "$SINGLE_BRANCH" ]
@@ -29,12 +32,15 @@ then
   git fetch -p origin
   # Exclude refs created by GitHub for pull request.
   git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
+  GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --mirror"
+else
+  GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS $SINGLE_BRANCH"
 fi
 
 if [ "$DRY_RUN" = "true" ]
 then
     echo "INFO: Dry Run, no data is pushed"
-    git push --mirror --dry-run
-else
-    git push --mirror
+    GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --dry-run"
 fi
+
+git push "$GIT_PUSH_FLAGS"
