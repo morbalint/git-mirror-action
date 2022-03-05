@@ -30,8 +30,9 @@ jobs:
             # github.com:22 SSH-2.0-babeld-0f6ba948\n
             github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl"
         with:
-          source-repo: "https://github.com/wearerequired/git-mirror-action.git" # Proof that HTTPS works as well
-          destination-repo: "git@github.com:morbalint/git-mirror-action.git"
-          single-branch: master
-          single-branch-force: true
+          # there is nothing special about this repo, aside from having multiple branches
+          source-repo: "https://github.com/richardszalay/mockhttp" # Proof that HTTPS works as well
+          destination-repo: "git@github.com:morbalint/mockhttp.git"
+          branches: "master:netstandard"
+          force-push-branches: true
           dry-run: true

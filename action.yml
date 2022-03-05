@@ -5,19 +5,19 @@ branding:
   color: 'orange'
 inputs:
   source-repo:
-    description: 'SSH URL of the source repo.'
+    description: 'SSH (or HTTPS) URL of the source repo.'
     required: true
     default: ''
   destination-repo:
     description: 'SSH URL of the destination repo.'
     required: true
     default: ''
-  single-branch:
-    description: 'If present only mirror this single branch.'
+  branches:
+    description: 'Optional `:` separated list of branches to mirror.'
     required: false
     default: ''
-  single-branch-force:
-    description: 'Force push the single branch.'
+  force-push-branches:
+    description: 'Force push selected branches.'
     required: false
     default: 'false'
   dry-run:
@@ -30,6 +30,6 @@ runs:
   args:
     - ${{ inputs.source-repo }}
     - ${{ inputs.destination-repo }}
-    - ${{ inputs.single-branch }}
-    - ${{ inputs.single-branch-force }}
+    - ${{ inputs.branches }}
+    - ${{ inputs.force-push-branches }}
     - ${{ inputs.dry-run }}
