@@ -43,4 +43,5 @@ then
     GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --dry-run"
 fi
 
-git push "$GIT_PUSH_FLAGS"
+echo "final git command: 'git push $GIT_PUSH_FLAGS'"
+git push $GIT_PUSH_FLAGS

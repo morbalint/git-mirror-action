@@ -51,6 +51,8 @@ jobs:
         with:
           source-repo: "git@github.com:wearerequired/git-mirror-action.git"
           destination-repo: "git@bitbucket.org:wearerequired/git-mirror-action.git"
+          single-branch: master
+          dry-run: true
 ```
 
 ## Docker
