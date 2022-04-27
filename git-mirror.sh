@@ -2,30 +2,44 @@
 
 set -e
 
-SOURCE_REPO=$1
-DESTINATION_REPO=$2
-SOURCE_DIR=$(basename "$SOURCE_REPO")
-BRANCHES=$3
-FORCE_PUSH_BRANCHES=$4
-DRY_RUN=$5
+export GIT_SSH_COMMAND="ssh -v"
 
-GIT_SSH_COMMAND="ssh -v"
+echo "SOURCE=$INPUT_SOURCE_REPO"
+echo "DESTINATION=$DINPUT_ESTINATION_REPO"
+echo "BRANCHES=$INPUT_BRANCHES"
+echo "FORCE PUSH BRANCHES=$INPUT_FORCE_PUSH_BRANCHES"
+echo "DRY RUN=$INPUT_DRY_RUN"
 
-echo "SOURCE=$SOURCE_REPO"
-echo "DESTINATION=$DESTINATION_REPO"
-echo "BRANCHES=$BRANCHES"
-echo "FORCE PUSH BRANCHES=$FORCE_PUSH_BRANCHES"
-echo "DRY RUN=$DRY_RUN"
+SOURCE_DIR=$(basename "$INPUT_SOURCE_REPO")
 
-if [ -z "$BRANCHES" ]
+if [ -n "$SSH_PRIVATE_KEY" ]
 then
-  git clone --mirror "$SOURCE_REPO" "$SOURCE_DIR" && cd "$SOURCE_DIR"
+  mkdir -p /root/.ssh
+  echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa
+  chmod 600 /root/.ssh/id_rsa
+fi
+
+if [ -n "$SSH_KNOWN_HOSTS" ]
+then
+  mkdir -p /root/.ssh
+  echo "StrictHostKeyChecking yes" >> /etc/ssh/ssh_config
+  echo "$SSH_KNOWN_HOSTS" > /root/.ssh/known_hosts
+  chmod 600 /root/.ssh/known_hosts
+else
+  echo "WARNING: StrictHostKeyChecking disabled"
+  echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+fi
+
+
+if [ -z "$INPUT_BRANCHES" ]
+then
+  git clone --mirror "$INPUT_SOURCE_REPO" "$SOURCE_DIR" && cd "$SOURCE_DIR"
 else
   echo "INFO: Branch mirroring only!"
   git init --bare -q target && cd target
-  git remote add origin "$SOURCE_REPO"
+  git remote add origin "$INPUT_SOURCE_REPO"
   git config --unset-all remote.origin.fetch
-  SPLIT_BRANCHES=$(echo "$BRANCHES" | tr ":" "\n")
+  SPLIT_BRANCHES=$(echo "$INPUT_BRANCHES" | tr ":" "\n")
   for BRANCH in $SPLIT_BRANCHES;
   do
     git config --add remote.origin.fetch "+refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
@@ -34,11 +48,11 @@ else
   git fetch --no-tags
 fi
 
-git remote set-url --push origin "$DESTINATION_REPO"
+git remote set-url --push origin "$INPUT_DESTINATION_REPO"
 GIT_PUSH_FLAGS=""
 
 # not much point of pruning all other branches that might be present when mirroring a single branch.
-if [ -z "$BRANCHES" ]
+if [ -z "$INPUT_BRANCHES" ]
 then
   git fetch -p origin
   # Exclude refs created by GitHub for pull request.
@@ -46,14 +60,14 @@ then
   GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --mirror"
 else
   GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS origin"
-  if [ "$FORCE_PUSH_BRANCHES" = "true" ]
+  if [ "$INPUT_FORCE_PUSH_BRANCHES" = "true" ]
   then
     echo "INFO: Force pushing the branches"
     GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --force"
   fi
 fi
 
-if [ "$DRY_RUN" = "true" ]
+if [ "$INPUT_DRY_RUN" = "true" ]
 then
     echo "INFO: Dry Run, no data is pushed"
     GIT_PUSH_FLAGS="$GIT_PUSH_FLAGS --dry-run"

@@ -4,11 +4,11 @@ branding:
   icon: 'copy'
   color: 'orange'
 inputs:
-  source-repo:
+  source_repo:
     description: 'SSH (or HTTPS) URL of the source repo.'
     required: true
     default: ''
-  destination-repo:
+  destination_repo:
     description: 'SSH URL of the destination repo.'
     required: true
     default: ''
@@ -16,20 +16,14 @@ inputs:
     description: 'Optional `:` separated list of branches to mirror.'
     required: false
     default: ''
-  force-push-branches:
+  force_push_branches:
     description: 'Force push selected branches.'
     required: false
     default: 'false'
-  dry-run:
+  dry_run:
     description: 'Execute a dry run.'
     required: false
     default: 'false'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.source-repo }}
-    - ${{ inputs.destination-repo }}
-    - ${{ inputs.branches }}
-    - ${{ inputs.force-push-branches }}
-    - ${{ inputs.dry-run }}
