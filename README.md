@@ -4,11 +4,11 @@ A GitHub Action for [mirroring a git repository](https://help.github.com/en/arti
 
 ## Inputs
 
-### `source-repo`
+### `source_repo`
 
 **Required** SSH URL of the source repo.
 
-### `destination-repo`
+### `destination_repo`
 
 **Required** SSH URL of the destination repo.
 
@@ -18,11 +18,11 @@ A GitHub Action for [mirroring a git repository](https://help.github.com/en/arti
 
 Note `:` is used because it's one of the illegal characters to be used in a branch name.
 
-### `force-push-branches`
+### `force_push_branches`
 
 **Optional** *(default: `false`)* Only matters if `branches` are not empty. If set to `true` the mirroring will force push the branches.
 
-### `dry-run`
+### `dry_run`
 
 **Optional** *(default: `false`)* Execute a dry run. All steps are executed, but no updates are pushed to the destination repo.
 
@@ -55,19 +55,18 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
         with:
-          source-repo: "git@github.com:wearerequired/git-mirror-action.git"
-          destination-repo: "git@bitbucket.org:wearerequired/git-mirror-action.git"
+          source_repo: "git@github.com:wearerequired/git-mirror-action.git"
+          destination_repo: "git@bitbucket.org:wearerequired/git-mirror-action.git"
           branches: "master:hypothetical-other-branch"
-          force-push-branches: true
-          dry-run: true
+          force_push_branches: true
+          dry_run: true
 ```
 
 ## Docker
 
 ```sh
-docker run --rm -e "SSH_PRIVATE_KEY=$(cat ~/.ssh/id_rsa)" $(docker build -q .) "$SOURCE_REPO" "$DESTINATION_REPO"
+docker run --rm -e "SSH_PRIVATE_KEY=$(cat ~/.ssh/id_rsa)" $(docker build -q .) "$INPUT_SOURCE_REPO" "$INPUT_DESTINATION_REPO"
 ```
-
 
 ## License
 
